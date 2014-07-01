@@ -1,0 +1,82 @@
+<html>
+<script src="http://connect.facebook.net/zh_TW/all.js"></script>
+<script>
+	var ihandle=null;
+	window.fbAsyncInit  =function() {
+		FB.init({appId:'417991854893196',status:true,cookie:true,xfbml:true,
+			oauth:true});
+		ihandle=setInterval("FB.getLoginStatus(loginstatus);",1000);
+	}
+	var loginstatus=function(response) {
+		if (!response.authResponse) return;
+		clearInterval(ihandle);
+		command.value="/me/friends";
+	}
+	var callfb=function() {
+		FB.api(command.value,function(response){
+			jsonres.innerHTML=JSON.stringify(response);
+			window.fb=response;//for debug
+		})
+	}
+	var assignment=function(){
+		FB.api("/me/friends",function(response){
+
+			var name=[];
+			for(i=0;i<response["data"].length ;i++){
+				name.push(response["data"][i]["id"]);
+			}
+			jsonres.innerHTML=JSON.stringify(name);
+			window.fb=response;//for debug
+		})
+	}
+	var pics=function(){
+		FB.api("/me/friends",function(response){
+
+			var pics=[];
+			for(var i=0;i<response["data"].length ;i++){
+				var id=response["data"][i]["id"]
+				pics.push("<IMG SRC='http://graph.facebook.com/"+id+"/picture'</IMG>");
+			}
+			jsonres.innerHTML= pics.join(" ");
+			window.fb=response;//for debug
+		})
+	}
+	
+	var picswithname=function(){
+		FB.api("/me/friends",function(response){
+
+		/*	var picswithname=[];
+		picswithname.push("<IMG SRC='http://graph.facebook.com/"+503599543+"/picture'</IMG>",response["data"][0]["name"]);
+			
+
+			jsonres.innerHTML= picswithname.join(" ");
+			//jsonres.innerHTML=JSON.stringify(name);
+
+		})}*/
+			var picswithname=[];
+			for(var i=0;i<response["data"].length ;i++){
+				var id=response["data"][i]["id"]
+
+			picswithname.push("<IMG SRC='http://graph.facebook.com/"+id+"/picture'</IMG>"
+				,"<BR>"
+				,response["data"][i]["name"]
+				,"<BR>");
+			}
+			jsonres.innerHTML= picswithname.join(" ");
+			
+			window.fb=response;//for debug
+		})
+	} 
+	
+
+</script>
+<div id="fb-root"></div>
+<div class="fb-login-button" size="large" scope="user_status,email" autologoutlink="true"></div>
+<input id="command"></input>
+<button onclick="callfb()">call</button>
+<button onclick="assignment()">assignment</button>
+<button onclick="pics()">pics</button>
+<button onclick="picswithname()">picswithname</button>
+<div id="jsonres"></div>
+</html>
+
