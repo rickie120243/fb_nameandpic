@@ -35,7 +35,7 @@
 			var pics=[];
 			for(var i=0;i<response["data"].length ;i++){
 				var id=response["data"][i]["id"]
-				pics.push("<IMG SRC='http://graph.facebook.com/"+id+"/picture'</IMG>");
+				pics.push("<IMG SRC='http://graph.facebook.com/"+id+"/picture'</IMG><br>");
 			}
 			jsonres.innerHTML= pics.join(" ");
 			window.fb=response;//for debug
